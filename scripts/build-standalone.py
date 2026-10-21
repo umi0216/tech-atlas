@@ -14,10 +14,10 @@ html = html.replace('./assets/favicon.svg', 'data:image/svg+xml;base64,' + icon)
 planet = base64.b64encode((root / 'assets/orbital-world.webp').read_bytes()).decode('ascii')
 html = html.replace('./assets/orbital-world.webp', 'data:image/webp;base64,' + planet)
 html = re.sub(r'\s*<link rel="preload"[^>]+>', '', html)
-html = html.replace('<link rel="stylesheet" href="./app.css">', '<style>\n' + css + '\n</style>')
+html = re.sub(r'<link rel="stylesheet" href="./app\.css(?:\?[^"]*)?">', lambda _: '<style>\n' + css + '\n</style>', html)
 for name in ['data.js', 'app.js', 'motion.js']:
     script = (root / name).read_text(encoding='utf-8').replace('</script', '<\\/script')
-    html = html.replace(f'<script src="./{name}"></script>', '<script>\n' + script + '\n</script>')
+    html = re.sub(r'<script src="\./' + re.escape(name) + r'(?:\?[^"]*)?"></script>', lambda _: '<script>\n' + script + '\n</script>', html)
 out = root / 'dist/tech-atlas-standalone.html'
 out.parent.mkdir(exist_ok=True)
 out.write_text(html, encoding='utf-8')

@@ -1,86 +1,40 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0c1120">
-  <meta name="description" content="个人技术成长宇宙：七大技术星系、技能深度、知识航线与能力里程碑。">
-  <title>TECH ATLAS · 我的技术宇宙</title>
-  <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
-  <link rel="preload" href="./assets/atlas-sans.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="./app.css?v=5c6c6b92b3">
+ <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#080b14">
+ <meta name="description" content="一个持续生长的知识宇宙。探索数学、计算、生命与人文，连接知识，留下自己的学习轨迹。">
+ <title>TECH ATLAS · 知识宇宙</title>
+ <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml"><link rel="preload" href="./assets/atlas-universe-sans.woff2" as="font" type="font/woff2" crossorigin>
+ <link rel="stylesheet" href="./universe.css?v=a12eec5dc310">
 </head>
 <body>
-  <div class="ambient" aria-hidden="true"></div>
-  <header class="site-header">
-    <a class="brand" href="#top" aria-label="Tech Atlas 首页"><img src="./assets/favicon.svg" width="36" height="36" alt=""><span>TECH ATLAS<small>个人技术宇宙</small></span></a>
-    <nav class="nav-main" aria-label="视图切换">
-      <button class="nav-item active" data-view="universe">宇宙星图</button>
-      <button class="nav-item" data-view="roadmap">成长航线</button>
-      <button class="nav-item" data-view="catalog">知识目录</button>
-    </nav>
-    <div class="header-tools"><button class="motion-toggle" id="motionToggle" type="button" aria-pressed="false" aria-label="开启动效" title="开启动效"><svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path class="motion-pause" d="M7 5v10m6-10v10"/><path class="motion-play" d="m7 4 9 6-9 6Z"/></svg><span class="motion-label">动效</span></button><a class="github-link" href="https://github.com/umi0216/tech-atlas" target="_blank" rel="noreferrer" aria-label="打开 GitHub 仓库"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.3c-3.3.7-4-1.4-4-1.4-.5-1.4-1.3-1.8-1.3-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.4 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.3-3.2-.1-.3-.6-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.3 11.3 0 0 1 6 0C17.3 4.9 18.3 5.2 18.3 5.2c.7 1.7.3 2.9.1 3.2a4.6 4.6 0 0 1 1.3 3.2c0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.4c0 .3.2.7.8.6A12 12 0 0 0 12 .3Z"/></svg></a><button class="top-btn" id="exportBtn" title="导出技能修改和里程碑">导出备份 <span aria-hidden="true">↗</span></button><button class="top-btn quiet" id="importBtn">导入</button><input type="file" id="importInput" accept=".json,application/json" hidden></div>
-  </header>
-  <main id="top" class="main-content">
-    <section class="hero" aria-labelledby="heroTitle">
-      <div class="hero-copy">
-        <p class="eyebrow"><span class="status-light"></span> A PERSONAL JOURNEY THROUGH TECHNOLOGY</p>
-        <h1 id="heroTitle">把每次探索，<br>连成自己的<span>宇宙。</span></h1>
-        <p class="hero-description">从第一行代码，到理解系统如何运转。<br>在这里，记录走过的路，也看见下一个想抵达的地方。</p>
-        <div class="hero-actions"><button class="button primary" data-jump="universe">进入我的星图 <span aria-hidden="true">↗</span></button><button class="button secondary" data-jump="roadmap">查看成长航线 <span aria-hidden="true">→</span></button></div>
-        <p class="hero-note"><span></span> 当前主线 <strong>软件与系统工程</strong><i>/</i> 并行探索 <strong>AI 模型机制</strong></p>
-      </div>
-      <figure class="hero-art">
-        <svg class="orbital-system" viewBox="0 0 600 600" aria-hidden="true" focusable="false">
-          <g transform="translate(300 304) rotate(-24) scale(1 .6)">
-            <circle class="orbital-track" r="247"/>
-            <circle class="orbital-trace orbit-forward" r="247" pathLength="1"/>
-            <g class="orbit-satellite orbit-forward"><circle cx="247" r="10" class="satellite-glow"/><circle cx="247" r="3.3" class="satellite-light"/></g>
-          </g>
-          <g transform="translate(300 304) rotate(38) scale(1 .79)">
-            <circle class="orbital-track outer-track" r="259"/>
-            <g class="orbit-satellite orbit-reverse"><circle cx="259" r="8" class="satellite-glow"/><circle cx="259" r="2.5" class="satellite-light mint"/></g>
-          </g>
-        </svg>
-        <img class="planet-art" src="./assets/orbital-world.webp" alt="紫色环绕行星与远行的探测器，象征持续探索的知识宇宙" width="1254" height="1254" fetchpriority="high">
-        <div class="art-coordinate" aria-hidden="true">PERSONAL OBSERVATORY<br><span>EST. 2026 / ALWAYS CURIOUS</span></div>
-        <div class="observation-label"><span class="observation-star">✦</span><div>探索没有终点<small>ONE SMALL STEP, EVERY DAY.</small></div><span class="label-orbit" aria-hidden="true">↗</span></div>
-      </figure>
-    </section>
-    <section class="stats-row" id="statsRow" aria-label="个人知识探索概况"></section>
-    <section class="exploration" id="explore" aria-labelledby="pageTitle">
-      <div class="page-heading"><div><p class="eyebrow" id="sectionKicker">THE CONSTELLATIONS / 知识版图</p><h2 id="pageTitle">我的知识星图<span class="heading-star" aria-hidden="true">✦</span></h2><p id="pageSubtitle">七个知识星系，构成一张持续生长的地图。点击星体，留下你的探索记录。</p></div><div class="topbar-left"><span id="pageBreadcrumb" hidden>宇宙星图</span></div></div>
-      <div class="domain-shell"><button class="domain-btn all-domain active" id="allDomainsBtn">全部星系 <span>07</span></button><div id="domainNav" class="domain-nav"></div></div>
-        <div class="content-frame">
-          <section id="universeView" class="view-section active">
-            <div class="universe-topline"><div class="map-caption"><span class="indicator-pulse"></span><span id="mapCaption">UNIVERSE OVERVIEW</span></div><div class="map-controls"><div class="filter-pills" id="filterPills"><button class="filter-pill active" data-status="all">全部</button><button class="filter-pill" data-status="explored"><span class="pill-dot explored"></span> 已涉足</button><button class="filter-pill" data-status="active"><span class="pill-dot active"></span> 攻占中</button><button class="filter-pill" data-status="future"><span class="pill-dot future"></span> 未探索</button></div><button class="line-toggle" id="lineToggle" aria-pressed="false" title="查看全部知识关联；默认只在悬停或选中节点时显示">关联航线 <span id="lineMode">按需</span></button><button class="line-toggle" id="fullscreenBtn" aria-label="全屏星图"><svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M7 3H3v4m10-4h4v4M3 13v4h4m10-4v4h-4"/></svg></button></div></div>
-            <div class="map-stage" id="mapStage">
-              <div class="nebula nebula-one"></div><div class="nebula nebula-two"></div>
-              <svg id="cosmosSvg" xmlns="http://www.w3.org/2000/svg" aria-label="可交互的七大领域技能星图" tabindex="0">
-                <defs><radialGradient id="coreGlow"><stop stop-color="#b6e7ff" stop-opacity=".55"/><stop offset=".38" stop-color="#41b8eb" stop-opacity=".14"/><stop offset="1" stop-color="#41b8eb" stop-opacity="0"/></radialGradient><filter id="softGlow" x="-150%" y="-150%" width="400%" height="400%"><feGaussianBlur stdDeviation="8"/></filter><pattern id="starPattern" width="63" height="63" patternUnits="userSpaceOnUse"><circle cx="5" cy="8" r=".6" fill="#c5d7ff" opacity=".22"/><circle cx="38" cy="44" r=".85" fill="#a5b9eb" opacity=".25"/></pattern></defs>
-                <rect x="-2000" y="-2000" width="4000" height="4000" fill="url(#starPattern)" />
-                <g id="universeWorld"></g>
-              </svg>
-              <div class="canvas-watermark">SEVEN FIELDS. ONE JOURNEY.</div>
-              <div class="zoom-controls"><button id="zoomIn" aria-label="放大地图">+</button><button id="zoomOut" aria-label="缩小地图">−</button><button id="zoomReset" aria-label="重置视角"><svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="10" cy="10" r="5"/><path d="M10 1v5m0 8v5M1 10h5m8 0h5"/></svg></button></div>
-              <div class="map-bottom"><div class="map-legend"><span><i class="legend-pip explored"></i> 已涉足</span><span><i class="legend-pip active"></i> 正在攻占</span><span><i class="legend-pip future"></i> 未探索</span></div><span class="pan-hint">拖动探索 / 点击星体查看档案</span></div>
-            </div>
-            <div class="map-footer"><span><span class="footer-icon">✧</span> 星系表示领域，大小表示掌握深度。悬停或选中星体，查看关联。</span><button id="mapReset" class="subtle-link">返回全景 →</button></div>
-          </section>
-          <section id="roadmapView" class="view-section"><div class="section-head"><div><h2>探索航线 <span class="small-star">✳</span></h2><p>里程碑不是必修顺序，而是帮助你验证真实能力的导航坐标。</p></div><span class="section-tag">5 MILESTONES</span></div><div class="roadmap-grid" id="roadmapGrid"></div></section>
-          <section id="catalogView" class="view-section"><div class="section-head"><div><h2>知识星体目录 <span class="small-star">✳</span></h2><p>将星图展开成可检索的技能清单，单击条目即可更新进度。</p></div><span class="section-tag" id="catalogCount"></span></div><div class="catalog-tabs" id="catalogTabs"></div><div class="catalog-list" id="catalogList"></div></section>
-        </div>
-
-      <div class="map-reading-guide"><p><span>01 / 星系</span>划分领域，不划分高低。</p><p><span>02 / 星体</span>大小记录掌握，颜色记录状态。</p><p><span>03 / 航线</span>连接知识，让理解不断生长。</p></div>
-    </section>
-    <footer class="app-footer"><div class="footer-brand">TECH ATLAS <span>保持好奇，持续生长。</span></div><div class="footer-tools"><span><i class="tiny-dot"></i> 进度保存在此浏览器</span><button id="resetData" title="恢复示例会清除未导出的本地编辑">恢复初始数据</button></div></footer>
-  </main>
-    <aside class="inspector" id="inspector" role="dialog" aria-modal="true" aria-label="星体档案" inert>
-      <div class="inspector-header"><div><span class="inspector-overline">STAR INSPECTOR</span><h2 id="inspectorTitle">星体档案</h2></div><button class="close-detail" id="closeInspector" aria-label="关闭详情">×</button></div>
-      <div class="inspector-inner" id="inspectorContent"></div>
-    </aside>
-    <div class="drawer-scrim" id="drawerScrim"></div>
-    <div class="toast" id="toast" role="status"></div>
-  <script src="./data.js"></script><script src="./app.js?v=69a4eb758d"></script><script src="./motion.js?v=cce8fb1151"></script>
+ <a class="skip-link" href="#main">跳到主要内容</a>
+ <header class="atlas-header">
+  <a href="#/universe" class="atlas-brand" aria-label="知识宇宙首页"><img src="./assets/favicon.svg" alt="" width="35" height="35"><span>TECH ATLAS<small>一个持续生长的知识宇宙</small></span></a>
+  <nav class="primary-nav" aria-label="主要导航"><a href="#/universe" data-view="universe" aria-current="page"><span>◉</span> 宇宙图谱</a><a href="#/catalog" data-view="catalog"><span>▦</span> 知识目录</a><a href="#/personal" data-view="personal"><span>⌁</span> 我的探索</a></nav>
+  <div class="header-actions"><button class="search-trigger" id="openSearch" aria-label="搜索知识"><svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 4 4"/></svg><span>寻找一个知识</span><kbd>⌘ K</kbd></button><button class="icon-button motion-control" id="universeMotion" aria-label="暂停动效" aria-pressed="true" title="暂停动效">Ⅱ</button><a class="icon-button repo-link" href="https://github.com/umi0216/tech-atlas" aria-label="GitHub 源码" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"/></svg></a></div>
+ </header>
+ <main id="main">
+  <div id="universePage" class="page-view">
+   <section class="observatory" aria-label="三维知识宇宙">
+    <div class="space-backdrop" aria-hidden="true"></div>
+    <div id="spaceViewport" class="space-viewport" tabindex="0" role="group" aria-label="知识空间，拖动旋转，正负键缩放，方向键旋转；也可使用下方学科按钮"><div id="spaceLabels" class="space-labels"></div></div>
+    <div class="hero-intro"><p class="overline"><span class="live-dot"></span><span id="scopeEyebrow">A HOME FOR HUMAN CURIOSITY</span></p><h1 id="universeTitle">世界很大，<br><em>好奇心有坐标。</em></h1><p id="scopeDescription">从一个问题出发，走向彼此相连的知识。<br>在这里，慢慢建立你对世界的理解。</p><button id="heroAction" class="soft-button">从数学开始探索 <span aria-hidden="true">↗</span></button><span id="scopeCount" class="scope-count">七个学科入口，更多联系正在生长</span></div>
+    <div class="space-coordinate" aria-hidden="true"><span>THE OBSERVATORY</span><small>保持好奇 · 持续生长</small><div class="coordinate-cross">＋</div></div>
+    <div class="scene-note"><span class="mini-orbit" aria-hidden="true"></span><span>每一颗星，都是通向理解的入口</span></div>
+    <div class="space-bottom"><nav id="spaceBreadcrumb" class="space-breadcrumb" aria-label="当前知识位置"></nav><div class="scene-tools"><span id="sceneHint">拖动旋转 · 聚焦后滚轮缩放</span><button class="icon-button" id="sceneZoomOut" aria-label="缩小知识空间">−</button><button class="icon-button" id="sceneZoomIn" aria-label="放大知识空间">＋</button><button class="icon-button" id="sceneReset" aria-label="重置知识空间视角"><svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="10" cy="10" r="5"/><path d="M10 1v5m0 8v5M1 10h5m8 0h5"/></svg></button></div></div>
+   </section>
+   <section class="atlas-section fields-section" aria-labelledby="fieldsTitle"><div class="section-heading"><div><p class="overline" id="fieldsEyebrow">THE FIELDS OF KNOWLEDGE</p><h2 id="fieldsTitle">世界的不同切面<span>✦</span></h2></div><p id="fieldsDescription">选择一个方向，让好奇心继续深入。</p></div><div id="fieldGrid" class="field-grid"></div></section>
+   <section class="atlas-section pathways-section" aria-labelledby="pathTitle"><div class="section-heading"><div><p class="overline">FOLLOW A THREAD</p><h2 id="pathTitle">沿着问题，连接知识<span>⌁</span></h2></div><p>从具体问题出发，逐步走向原理。</p></div><div class="path-grid"><button class="path-card math-path" data-route="linear-algebra"><span class="path-number">01 / MATHEMATICS</span><h3>向量如何<br>改变一个空间？</h3><p>向量与空间 <span>→</span> 线性映射 <span>→</span> 秩</p><span class="path-open">进入线性代数 <i>↗</i></span><span class="path-art" aria-hidden="true">∑</span></button><button class="path-card life-path" data-route="life"><span class="path-number">02 / LIFE SCIENCES</span><h3>生命如何<br>组织自己的世界？</h3><p>细胞与分子 <span>·</span> 遗传与信息 <span>·</span> 演化</p><span class="path-open">打开生命科学 <i>↗</i></span><span class="path-art" aria-hidden="true">⌁</span></button><button class="path-card personal-path" data-personal><span class="path-number">YOUR OWN CONSTELLATION</span><h3>你的每次探索，<br>都值得留下。</h3><p>技术档案、个人笔记与实践证据</p><span class="path-open">继续我的探索 <i>↗</i></span><span class="path-art" aria-hidden="true">✧</span></button></div></section>
+  </div>
+  <section id="catalogPage" class="page-view atlas-section collection-page" hidden aria-labelledby="catalogTitle"><div class="collection-heading"><p class="overline">THE KNOWLEDGE INDEX</p><h1 id="catalogTitle">从一个名字，<br><em>找到一片世界。</em></h1><p>学科、分支与概念，在这里展开成一份可寻找的目录。</p></div><div class="catalog-toolbar"><label class="catalog-search"><span aria-hidden="true">⌕</span><input id="catalogSearch" type="search" placeholder="搜索知识、分支或概念…" aria-label="搜索知识目录"></label><select id="catalogField" aria-label="按学科筛选"><option value="all">全部学科</option></select></div><div class="result-summary" id="catalogSummary"></div><div id="catalogGrid" class="catalog-grid"></div><div class="empty-state" id="catalogEmpty" hidden><span>⌕</span><h2>还没有找到这个知识</h2><p>换一个关键词试试，或者从某个学科开始探索。</p><button class="quiet-button" id="clearCatalog">清除筛选</button></div></section>
+  <section id="personalPage" class="page-view atlas-section collection-page" hidden aria-labelledby="personalTitle"><div class="collection-heading"><p class="overline">YOUR OWN CONSTELLATION</p><h1 id="personalTitle">让走过的路，<br><em>成为自己的星图。</em></h1><p>收藏想了解的知识，记录自己的理解。你可以按照自己的节奏前进。</p></div><div class="personal-bar"><div class="local-status"><span class="live-dot"></span>记录保存在当前浏览器</div><div><button class="quiet-button" id="newExport">导出备份 ↗</button><button class="quiet-button" id="newImport">导入备份</button><input id="personalImport" type="file" accept=".json,application/json" hidden></div></div><div class="personal-stats" id="personalStats"></div><div class="personal-tabs" role="group" aria-label="个人记录筛选"><button class="active" data-personal-filter="bookmarked" aria-pressed="true">想去的地方</button><button data-personal-filter="active" aria-pressed="false">正在探索</button><button data-personal-filter="notes" aria-pressed="false">我的笔记</button></div><div id="personalGrid" class="catalog-grid"></div><div id="personalEmpty" class="empty-state"><span>✧</span><h2>给下一次好奇，留一个位置</h2><p>打开任意知识条目，点击“收藏”。<br>它会出现在这里，等你有空时继续。</p><a href="#/universe" class="soft-button">回到知识宇宙 ↗</a></div><a class="legacy-entry" href="./legacy.html"><div><span class="overline">YOUR TECHNICAL JOURNEY</span><h3>原有技术星图与成长航线</h3><p>50 个技术节点、技能编辑、五个里程碑和原版备份，继续保留。</p></div><span aria-hidden="true">↗</span></a></section>
+  <footer class="atlas-footer"><a href="#/universe" class="footer-logo">✦ TECH ATLAS</a><p>知识可以很辽阔，每一步也可以很小。</p><span>保持好奇，持续生长。</span></footer>
+ </main>
+ <dialog id="searchDialog" class="search-dialog" aria-labelledby="searchTitle"><div class="search-dialog-top"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="8" cy="8" r="5.4"/><path d="m12 12 5 5"/></svg><label class="sr-only" for="universalSearch" id="searchTitle">搜索整个知识宇宙</label><input id="universalSearch" type="search" placeholder="你想理解什么？" autocomplete="off"><button class="icon-button" data-close="searchDialog" aria-label="关闭搜索">×</button></div><div id="searchResults" class="search-results"></div><div class="search-dialog-bottom"><span>按 Enter 打开第一个结果</span><span>ESC 关闭</span></div></dialog>
+ <dialog id="readerDialog" class="reader-dialog" aria-labelledby="readerTitle"><div class="reader-top"><span id="readerBreadcrumb"></span><button class="icon-button" data-close="readerDialog" aria-label="关闭知识条目">×</button></div><div class="reader-scroll" id="readerContent"></div></dialog>
+ <div id="universeToast" class="universe-toast" role="status" aria-live="polite"></div>
+ <noscript><div class="noscript-note">打开交互式知识宇宙需要 JavaScript。<a href="./docs/PROJECT_VISION.md">阅读项目愿景</a></div></noscript>
+ <script src="./data.js?v=b96596a472cd"></script><script>globalThis.ATLAS_LEGACY=ATLAS_DATA;</script><script src="./build/universe.js?v=b194ce55a1b3"></script>
 </body>
 </html>

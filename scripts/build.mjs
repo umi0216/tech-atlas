@@ -1,0 +1,13 @@
+import {build} from 'esbuild';
+import {readFile,writeFile,mkdir} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+import {fileURLToPath} from 'node:url';
+import path from 'node:path';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+await mkdir(path.join(root,'build'),{recursive:true});
+await build({absWorkingDir:root,entryPoints:['src/universe.js'],bundle:true,minify:true,format:'iife',target:['es2022'],outfile:'build/universe.js',legalComments:'eof'});
+const hash=async p=>createHash('sha256').update(await readFile(path.join(root,p))).digest('hex').slice(0,12);
+let html=await readFile(path.join(root,'index.html'),'utf8');
+for(const name of ['universe.css','build/universe.js','data.js'])html=html.replace(new RegExp(name.replaceAll('.','\\.')+'(?:\\?v=[a-f0-9]+)?(?=")','g'),`${name}?v=${await hash(name)}`);
+await writeFile(path.join(root,'index.html'),html);
+console.log('Built 3D knowledge universe and versioned local assets.');

@@ -19,10 +19,10 @@
 
 ## 当前工程与验证
 
-当前入口为根目录 `index.html`，`data.js` 提供初始数据，`app.js` 提供核心交互，`motion.js` 提供可选增强。以仓库实际源码为准；文档中的未来架构不视为已经实现。
+当前入口为根目录 `index.html`，新模块位于 `src/`，通过 `npm run build` 生成并提交 `build/universe.js`。`data.js` 保留历史初始数据，`legacy.html` 继续使用 `app.js` 与 `motion.js`。以仓库实际源码为准；文档中的未来架构不视为已经实现。
 
 - JavaScript 改动运行 `npm run check`；按改动验证技能编辑保存、搜索、筛选、备份兼容和相关镜头交互。
 - 界面改动检查桌面与手机实际渲染、标签可读性、横向溢出、动效关闭与减少动态效果。
-- 修改 `app.css`、`app.js` 或 `motion.js` 后更新 `index.html` 对应资源 URL 中 `v` 的内容哈希，避免线上新旧资源混用。
+- 修改新模块或 `universe.css` 后运行 `npm run build`，提交源码与版本化产物。修改旧版 `app.css`、`app.js` 或 `motion.js` 后更新 `legacy.html` 对应资源 URL 的内容哈希，避免线上新旧资源混用。
 - 若修改脚本引用或资源结构，同步维护 `scripts/build-standalone.py`，验证单文件版与项目子目录路径。
 - 推送保留并发改动，不强制覆盖分支。发布后核对实际部署版本；向用户报告本次完成内容、验证和限制。

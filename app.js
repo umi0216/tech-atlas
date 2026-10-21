@@ -268,5 +268,5 @@
   });
   new ResizeObserver(()=>{if(currentView==='universe'){if(selectedDomain==='all')fitView();else focusDomain(selectedDomain)}}).observe(stage);
   $('.nav-item[data-view=universe]').setAttribute('aria-current','page');
-  renderAll();requestAnimationFrame(()=>{if(innerWidth<700)selectDomain('software');else fitView()});
+  renderAll();requestAnimationFrame(()=>{if(innerWidth<700)selectDomain('software');else fitView();const id=new URLSearchParams(location.hash.slice(1)).get('node');if(id&&getSkill(id)){selectDomain(getSkill(id).domain);openSkill(id)}});
 })();

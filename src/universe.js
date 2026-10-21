@@ -65,14 +65,14 @@ function renderReader(id){const node=knowledge.nodes.get(id);if(!node)return;rea
  $('#readerContent').scrollTop=0;
  if(!$('#readerDialog').open){returnFocus=document.activeElement;$('#readerDialog').showModal()}
 }
-function route(){const raw=location.hash.slice(1)||'/universe';const [path,query='']=raw.split('?');const parts=path.split('/').filter(Boolean);const view=['universe','catalog','personal'].includes(parts[0])?parts[0]:'universe';let id;try{id=decodeURIComponent(parts[1]||'universe')}catch{id='universe'}
+function route(){const previousScope=scope;const raw=location.hash.slice(1)||'/universe';const [path,query='']=raw.split('?');const parts=path.split('/').filter(Boolean);const view=['universe','catalog','personal'].includes(parts[0])?parts[0]:'universe';let id;try{id=decodeURIComponent(parts[1]||'universe')}catch{id='universe'}
  if(!knowledge.nodes.has(id)||id!=='universe'&&!canEnter(knowledge.nodes.get(id)))id='universe';
  previousView=currentView;currentView=view;scope=id;
  ['universe','catalog','personal'].forEach(v=>$('#'+v+'Page').hidden=v!==view);
  $$('.primary-nav a').forEach(a=>{if(a.dataset.view===view)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
  if(view==='universe')renderScope();if(view==='catalog'){renderCatalog();document.title='知识目录 · TECH ATLAS'}if(view==='personal'){renderPersonal();document.title='我的探索 · TECH ATLAS'}
  const selected=new URLSearchParams(query).get('node');if(selected&&knowledge.nodes.has(selected)){renderReader(selected)}else if($('#readerDialog').open){$('#readerDialog').close();readerId=null}
- if(previousView!==view)window.scrollTo({top:0,behavior:'instant'});
+ if(previousView!==view||(view==='universe'&&previousScope!==scope))window.scrollTo({top:0,behavior:'instant'});
 }
 function renderSearch(){const q=searchQuery.trim().toLocaleLowerCase();let list;if(!q)list=['mathematics','linear-algebra','rank','life','transformer','lora'].map(id=>knowledge.nodes.get(id));else list=[...knowledge.nodes.values()].filter(n=>n.kind!=='universe'&&(n.title+' '+n.summary+' '+(n.en||'')).toLocaleLowerCase().includes(q)).sort((a,b)=>Number(b.title.toLocaleLowerCase().includes(q))-Number(a.title.toLocaleLowerCase().includes(q))).slice(0,20);
  $('#searchResults').innerHTML=`<p class="search-result-note">${q?`找到 ${list.length}${list.length===20?'+':''} 个结果`:'从这些地方开始'}</p>`+(list.length?list.map(n=>`<button class="search-result" data-search-node="${n.id}"><span><strong>${escape(n.title)}</strong><small>${escape(knowledge.ancestors(n.id).slice(1,-1).map(x=>x.title).join(' / ')||KIND[n.kind])}</small></span><span>↗</span></button>`).join(''):'<p class="search-no-results">还没有收录这个知识，试试另一个关键词。</p>');

@@ -1,4 +1,4 @@
-/* V2 motion layer. No dependencies, network requests or changes to study data. */
+/* V3 motion layer. No dependencies, network requests or changes to study data. */
 (() => {
   'use strict';
   const root = document.documentElement;
@@ -6,6 +6,8 @@
   const hero = document.querySelector('.hero');
   const artwork = document.querySelector('.hero-art');
   const ambient = document.querySelector('.ambient');
+  const mapStage = document.querySelector('#mapStage');
+  let mapVisible = false;
   const systemMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
   const preferenceKey = 'tech-atlas-motion';
@@ -81,7 +83,7 @@
       y: ((i * 0.41421356237 + 0.07) % 1) * height,
       radius: i % 7 === 0 ? 1.1 : 0.55,
       phase: i * 1.7,
-      speed: 0.28 + (i % 5) * 0.04
+      speed: 1.4 + (i % 5) * 0.35
     }));
   }
 
@@ -108,7 +110,7 @@
       context.clearRect(0, 0, width, height);
       for (const star of stars) {
         const x = (star.x + seconds * star.speed) % width;
-        const alpha = 0.15 + (Math.sin(seconds * 0.45 + star.phase) + 1) * 0.12;
+        const alpha = 0.15 + (Math.sin(seconds * 0.9 + star.phase) + 1) * 0.2;
         context.beginPath();
         context.arc(x, star.y, star.radius, 0, Math.PI * 2);
         context.fillStyle = `rgba(193, 202, 243, ${alpha})`;
@@ -144,6 +146,7 @@
   function syncPlayback() {
     const playing = enabled && heroVisible && !document.hidden;
     root.classList.toggle('motion-suspended', !playing);
+    root.classList.toggle('motion-map-suspended', !enabled || !mapVisible || document.hidden);
     root.classList.toggle('motion-page-hidden', document.hidden);
     cancelAnimationFrame(animationFrame);
     animationFrame = 0;
@@ -180,10 +183,15 @@
 
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(entries => {
+      mapVisible = entries[0].isIntersecting;
+      root.classList.toggle('motion-map-suspended', !enabled || !mapVisible || document.hidden);
+    }, { rootMargin: '0px' }).observe(mapStage);
+    new IntersectionObserver(entries => {
       heroVisible = entries[0].isIntersecting;
       syncPlayback();
     }, { rootMargin: '0px' }).observe(hero);
   }
+  if (!('IntersectionObserver' in window)) mapVisible = true;
   if ('ResizeObserver' in window) {
     new ResizeObserver(() => { if (enabled && !document.hidden) resizeStars(); }).observe(ambient);
   } else {

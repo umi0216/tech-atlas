@@ -63,6 +63,7 @@
       const g=ns('g',{role:'button',tabindex:0,'data-domain':d.id,'aria-label':`查看${d.name}星系`,class:'mobile-summary-domain'},summaryWorld);
       if(i%2===1)ns('path',{d:`M ${points[i-1].x} ${y} Q ${w*.5} ${y-20} ${x} ${y}`,fill:'none',stroke:d.color,'stroke-opacity':'.16'},summaryWorld);
       ns('circle',{cx:x,cy:y,r:22,fill:d.color,'fill-opacity':'.05',stroke:d.color,'stroke-opacity':'.2'},g);
+      ns('circle',{cx:x,cy:y,r:22,fill:'none',stroke:d.color,class:'summary-pulse','aria-hidden':'true',style:`--pulse-delay:-${i*.7}s`},g);
       ns('circle',{cx:x,cy:y,r:6,fill:d.color,'fill-opacity':'.8'},g);
       label(x,y+43,d.name,{'text-anchor':'middle','font-size':12,fill:'#b7cbd1'},g);
       label(x,y+63,`${DATA.skills.filter(s=>s.domain===d.id).length} 个知识节点`,{'text-anchor':'middle','font-size':10,fill:'#718c9a'},g);
@@ -119,15 +120,25 @@
       core.addEventListener('click',()=>selectDomain(d.id));
       core.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selectDomain(d.id)}});
     });
-    DATA.edges.forEach(([a,b])=>{
+    const laneCounts={};
+    DATA.edges.forEach(([a,b],edgeIndex)=>{
       const pa=nodePos[a],pb=nodePos[b];if(!pa||!pb)return;
       const sa=getSkill(a),sb=getSkill(b),internal=sa.domain===sb.domain;
       const dx=pb.x-pa.x,dy=pb.y-pa.y;
       const curve=internal?16:Math.min(Math.abs(dx)*.1+Math.abs(dy)*.08,85);
-      ns('path',{d:`M ${pa.x} ${pa.y} C ${pa.x+dx*.35} ${pa.y+dy*.25-curve}, ${pb.x-dx*.35} ${pb.y-dy*.25-curve}, ${pb.x} ${pb.y}`,class:'edge',pathLength:1,'data-a':a,'data-b':b,'data-internal':internal?'1':'0'},world);
+      const path=`M ${pa.x} ${pa.y} C ${pa.x+dx*.35} ${pa.y+dy*.25-curve}, ${pb.x-dx*.35} ${pb.y-dy*.25-curve}, ${pb.x} ${pb.y}`;
+      ns('path',{d:path,class:'edge',pathLength:1,'data-a':a,'data-b':b,'data-internal':internal?'1':'0'},world);
+      // A few moving glints follow real, visible knowledge links; never invent routes.
+      if(internal&&eligible(sa)&&eligible(sb)&&sa.status!=='future'&&sb.status!=='future'&&(laneCounts[sa.domain]||0)<2){
+        laneCounts[sa.domain]=(laneCounts[sa.domain]||0)+1;
+        ns('path',{d:path,class:'idle-lane',pathLength:1,stroke:domainById[sa.domain].color,'aria-hidden':'true','data-a':a,'data-b':b,style:`--lane-duration:${5+edgeIndex%4}s;--lane-delay:-${edgeIndex*.73}s`},world);
+      }
     });
     // Small explorer coordinate, deliberately separate from scored skill nodes.
-    const origin=ns('g',{opacity:'.7'},world);
+    const origin=ns('g',{opacity:'.7','aria-hidden':'true'},world);
+    const orbit=ns('g',{transform:'translate(10 15)'},origin);
+    ns('circle',{r:31,class:'explorer-orbit orbit-forward',pathLength:1},orbit);
+    ns('circle',{r:39,class:'explorer-wave'},orbit);
     ns('circle',{cx:10,cy:15,r:21,fill:'#172e32','fill-opacity':'.7',stroke:'#7eaca1','stroke-opacity':'.28'},origin);
     ns('path',{d:'M 10 3 L 13 12 L 22 15 L 13 18 L 10 27 L 7 18 L -2 15 L 7 12 Z',fill:'#9dc5ba'},origin);
     label(10,58,'EXPLORER',{class:'main-core-sub','text-anchor':'middle'},origin);
@@ -135,7 +146,7 @@
       const n=nodePos[s.id],c=colorOf(s),ok=eligible(s),radius=5+s.mastery*1.6;
       const nodeColor=s.status==='active'?'#dfb888':s.status==='future'?'#a89abf':'#8ac9b4';
       const g=ns('g',{class:`skill-group ${s.status==='future'?'future-node':''} ${!ok?'dimmed':''} ${selectedSkill===s.id?'selected':''}`,'data-skill':s.id,tabindex:ok?0:-1,role:'button','aria-label':`${s.name}，${STATUS[s.status]}，L${s.mastery}`},world);
-      if(s.status==='active')ns('circle',{cx:n.x,cy:n.y,r:radius+5,fill:'none',stroke:nodeColor,'stroke-width':'.75','stroke-opacity':'.36',class:'node-halo'},g);
+      if(s.status==='active')ns('circle',{cx:n.x,cy:n.y,r:radius+5,fill:'none',stroke:nodeColor,'stroke-width':'.75','stroke-opacity':'.36',class:'node-halo idle-node-pulse',style:`--pulse-delay:-${Math.abs(n.x+n.y)*.017}s`},g);
       ns('circle',{cx:n.x,cy:n.y,r:radius,class:'skill-node',fill:s.status==='future'?'#171e2b':s.status==='active'?'#6c5540':'#355e54',stroke:nodeColor,'stroke-opacity':'.85'},g);
       ns('circle',{cx:n.x,cy:n.y,r:2,fill:nodeColor,'fill-opacity':s.status==='future'?'.45':'.9'},g);
       label(n.x+20,n.y+6,s.name,{class:'skill-label','text-anchor':'start'},g);
@@ -155,6 +166,7 @@
     highlightEdges(selectedSkill);setCamera();
   }
   function highlightEdges(id){
+    world.querySelectorAll('.idle-lane').forEach(e=>{e.style.opacity=id?(e.dataset.a===id||e.dataset.b===id?'.85':'.12'):''});
     world.querySelectorAll('.edge').forEach(e=>{
       const a=e.dataset.a,b=e.dataset.b,related=!!id&&(a===id||b===id),visible=eligible(getSkill(a))&&eligible(getSkill(b));
       e.classList.toggle('highlight',related);

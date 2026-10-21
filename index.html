@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0c1120">
+  <meta name="description" content="个人技术成长宇宙：七大技术星系、技能深度、知识航线与能力里程碑。">
+  <title>TECH ATLAS · 我的技术宇宙</title>
+  <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
+  <link rel="preload" href="./assets/atlas-sans.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="./app.css">
+</head>
+<body>
+  <div class="ambient" aria-hidden="true"></div>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Tech Atlas 首页"><img src="./assets/favicon.svg" width="36" height="36" alt=""><span>TECH ATLAS<small>个人技术宇宙</small></span></a>
+    <nav class="nav-main" aria-label="视图切换">
+      <button class="nav-item active" data-view="universe">宇宙星图</button>
+      <button class="nav-item" data-view="roadmap">成长航线</button>
+      <button class="nav-item" data-view="catalog">知识目录</button>
+    </nav>
+    <div class="header-tools"><a class="github-link" href="https://github.com/umi0216/tech-atlas" target="_blank" rel="noreferrer" aria-label="打开 GitHub 仓库"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.3c-3.3.7-4-1.4-4-1.4-.5-1.4-1.3-1.8-1.3-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.4 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.3-3.2-.1-.3-.6-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.3 11.3 0 0 1 6 0C17.3 4.9 18.3 5.2 18.3 5.2c.7 1.7.3 2.9.1 3.2a4.6 4.6 0 0 1 1.3 3.2c0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.4c0 .3.2.7.8.6A12 12 0 0 0 12 .3Z"/></svg></a><button class="top-btn" id="exportBtn" title="导出技能修改和里程碑">导出备份 <span aria-hidden="true">↗</span></button><button class="top-btn quiet" id="importBtn">导入</button><input type="file" id="importInput" accept=".json,application/json" hidden></div>
+  </header>
+  <main id="top" class="main-content">
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="status-light"></span> A PERSONAL JOURNEY THROUGH TECHNOLOGY</p>
+        <h1 id="heroTitle">把每次探索，<br>连成自己的<span>宇宙。</span></h1>
+        <p class="hero-description">从第一行代码，到理解系统如何运转。<br>在这里，记录走过的路，也看见下一个想抵达的地方。</p>
+        <div class="hero-actions"><button class="button primary" data-jump="universe">进入我的星图 <span aria-hidden="true">↗</span></button><button class="button secondary" data-jump="roadmap">查看成长航线 <span aria-hidden="true">→</span></button></div>
+        <p class="hero-note"><span></span> 当前主线 <strong>软件与系统工程</strong><i>/</i> 并行探索 <strong>AI 模型机制</strong></p>
+      </div>
+      <figure class="hero-art">
+        <img class="planet-art" src="./assets/orbital-world.webp" alt="紫色环绕行星与远行的探测器，象征持续探索的知识宇宙" width="1254" height="1254" fetchpriority="high">
+        <div class="art-coordinate" aria-hidden="true">PERSONAL OBSERVATORY<br><span>EST. 2026 / ALWAYS CURIOUS</span></div>
+        <div class="observation-label"><span class="observation-star">✦</span><div>探索没有终点<small>ONE SMALL STEP, EVERY DAY.</small></div><span class="label-orbit" aria-hidden="true">↗</span></div>
+      </figure>
+    </section>
+    <section class="stats-row" id="statsRow" aria-label="个人知识探索概况"></section>
+    <section class="exploration" id="explore" aria-labelledby="pageTitle">
+      <div class="page-heading"><div><p class="eyebrow" id="sectionKicker">THE CONSTELLATIONS / 知识版图</p><h2 id="pageTitle">我的知识星图<span class="heading-star" aria-hidden="true">✦</span></h2><p id="pageSubtitle">七个知识星系，构成一张持续生长的地图。点击星体，留下你的探索记录。</p></div><div class="topbar-left"><span id="pageBreadcrumb" hidden>宇宙星图</span></div></div>
+      <div class="domain-shell"><button class="domain-btn all-domain active" id="allDomainsBtn">全部星系 <span>07</span></button><div id="domainNav" class="domain-nav"></div></div>
+        <div class="content-frame">
+          <section id="universeView" class="view-section active">
+            <div class="universe-topline"><div class="map-caption"><span class="indicator-pulse"></span><span id="mapCaption">UNIVERSE OVERVIEW</span></div><div class="map-controls"><div class="filter-pills" id="filterPills"><button class="filter-pill active" data-status="all">全部</button><button class="filter-pill" data-status="explored"><span class="pill-dot explored"></span> 已涉足</button><button class="filter-pill" data-status="active"><span class="pill-dot active"></span> 攻占中</button><button class="filter-pill" data-status="future"><span class="pill-dot future"></span> 未探索</button></div><button class="line-toggle" id="lineToggle" aria-pressed="false" title="查看全部知识关联；默认只在悬停或选中节点时显示">关联航线 <span id="lineMode">按需</span></button><button class="line-toggle" id="fullscreenBtn" aria-label="全屏星图"><svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M7 3H3v4m10-4h4v4M3 13v4h4m10-4v4h-4"/></svg></button></div></div>
+            <div class="map-stage" id="mapStage">
+              <div class="nebula nebula-one"></div><div class="nebula nebula-two"></div>
+              <svg id="cosmosSvg" xmlns="http://www.w3.org/2000/svg" aria-label="可交互的七大领域技能星图" tabindex="0">
+                <defs><radialGradient id="coreGlow"><stop stop-color="#b6e7ff" stop-opacity=".55"/><stop offset=".38" stop-color="#41b8eb" stop-opacity=".14"/><stop offset="1" stop-color="#41b8eb" stop-opacity="0"/></radialGradient><filter id="softGlow" x="-150%" y="-150%" width="400%" height="400%"><feGaussianBlur stdDeviation="8"/></filter><pattern id="starPattern" width="63" height="63" patternUnits="userSpaceOnUse"><circle cx="5" cy="8" r=".6" fill="#c5d7ff" opacity=".22"/><circle cx="38" cy="44" r=".85" fill="#a5b9eb" opacity=".25"/></pattern></defs>
+                <rect x="-2000" y="-2000" width="4000" height="4000" fill="url(#starPattern)" />
+                <g id="universeWorld"></g>
+              </svg>
+              <div class="canvas-watermark">SEVEN FIELDS. ONE JOURNEY.</div>
+              <div class="zoom-controls"><button id="zoomIn" aria-label="放大地图">+</button><button id="zoomOut" aria-label="缩小地图">−</button><button id="zoomReset" aria-label="重置视角"><svg width="17" height="17" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="10" cy="10" r="5"/><path d="M10 1v5m0 8v5M1 10h5m8 0h5"/></svg></button></div>
+              <div class="map-bottom"><div class="map-legend"><span><i class="legend-pip explored"></i> 已涉足</span><span><i class="legend-pip active"></i> 正在攻占</span><span><i class="legend-pip future"></i> 未探索</span></div><span class="pan-hint">拖动探索 / 点击星体查看档案</span></div>
+            </div>
+            <div class="map-footer"><span><span class="footer-icon">✧</span> 星系表示领域，大小表示掌握深度。悬停或选中星体，查看关联。</span><button id="mapReset" class="subtle-link">返回全景 →</button></div>
+          </section>
+          <section id="roadmapView" class="view-section"><div class="section-head"><div><h2>探索航线 <span class="small-star">✳</span></h2><p>里程碑不是必修顺序，而是帮助你验证真实能力的导航坐标。</p></div><span class="section-tag">5 MILESTONES</span></div><div class="roadmap-grid" id="roadmapGrid"></div></section>
+          <section id="catalogView" class="view-section"><div class="section-head"><div><h2>知识星体目录 <span class="small-star">✳</span></h2><p>将星图展开成可检索的技能清单，单击条目即可更新进度。</p></div><span class="section-tag" id="catalogCount"></span></div><div class="catalog-tabs" id="catalogTabs"></div><div class="catalog-list" id="catalogList"></div></section>
+        </div>
+
+      <div class="map-reading-guide"><p><span>01 / 星系</span>划分领域，不划分高低。</p><p><span>02 / 星体</span>大小记录掌握，颜色记录状态。</p><p><span>03 / 航线</span>连接知识，让理解不断生长。</p></div>
+    </section>
+    <footer class="app-footer"><div class="footer-brand">TECH ATLAS <span>保持好奇，持续生长。</span></div><div class="footer-tools"><span><i class="tiny-dot"></i> 进度保存在此浏览器</span><button id="resetData" title="恢复示例会清除未导出的本地编辑">恢复初始数据</button></div></footer>
+  </main>
+    <aside class="inspector" id="inspector" role="dialog" aria-modal="true" aria-label="星体档案" inert>
+      <div class="inspector-header"><div><span class="inspector-overline">STAR INSPECTOR</span><h2 id="inspectorTitle">星体档案</h2></div><button class="close-detail" id="closeInspector" aria-label="关闭详情">×</button></div>
+      <div class="inspector-inner" id="inspectorContent"></div>
+    </aside>
+    <div class="drawer-scrim" id="drawerScrim"></div>
+    <div class="toast" id="toast" role="status"></div>
+  <script src="./data.js"></script><script src="./app.js"></script>
+</body>
+</html>

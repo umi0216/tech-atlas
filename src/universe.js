@@ -27,6 +27,7 @@ function bindNodes(host){host.querySelectorAll('[data-open]').forEach(b=>b.addEv
 let scene;
 try{scene=new KnowledgeSpace($('#spaceViewport'),$('#spaceLabels'),id=>openNode(id),ready=>{if(!ready){$('#sceneHint').textContent='使用学科入口继续探索';$('#sceneZoomIn').disabled=true;$('#sceneZoomOut').disabled=true}})}catch(error){$('#sceneHint').textContent='使用下方学科入口探索';console.warn('Spatial renderer unavailable; directory remains available.',error)}
 function renderScope(){const node=knowledge.nodes.get(scope)||knowledge.nodes.get('universe'),children=knowledge.children(node.id);const isRoot=node.id==='universe';
+ $('#welcomePlanet').hidden=!isRoot;
  $('#scopeEyebrow').textContent=isRoot?'A HOME FOR HUMAN CURIOSITY':node.en||`${fieldOf(node).en} / EXPLORING`;
  if(isRoot)$('#universeTitle').innerHTML='世界很大，<br><em>好奇心有坐标。</em>';else $('#universeTitle').textContent=node.title;
  $('#scopeDescription').innerHTML=isRoot?'从一个问题出发，走向彼此相连的知识。<br>在这里，慢慢建立你对世界的理解。':escape(node.summary);
@@ -81,6 +82,7 @@ function renderSearch(){const q=searchQuery.trim().toLocaleLowerCase();let list;
 function openSearch(){searchQuery='';$('#universalSearch').value='';renderSearch();$('#searchDialog').showModal();$('#universalSearch').focus()}
 function applyMotion(){motionEnabled=!systemMotion.matches&&motionPreference!=='off';document.documentElement.dataset.motion=motionEnabled?'on':'off';$('#universeMotion').textContent=motionEnabled?'Ⅱ':'▷';$('#universeMotion').setAttribute('aria-pressed',String(motionEnabled));$('#universeMotion').setAttribute('aria-label',motionEnabled?'暂停动效':'开启动效');$('#universeMotion').title=systemMotion.matches?'遵循系统减少动态效果':motionEnabled?'暂停动效':'开启动效';$('#universeMotion').disabled=systemMotion.matches;scene?.setMotion(motionEnabled)}
 $('#universeMotion').addEventListener('click',()=>{motionPreference=motionEnabled?'off':'on';try{localStorage.setItem('tech-atlas-motion',motionPreference)}catch{}applyMotion()});systemMotion.addEventListener('change',applyMotion);
+$('#enterKnowledgeSpace').addEventListener('click',()=>$('.observatory').scrollIntoView({behavior:motionEnabled?'smooth':'instant',block:'start'}));
 $('#openSearch').addEventListener('click',openSearch);$('#universalSearch').addEventListener('input',e=>{searchQuery=e.target.value;renderSearch()});$('#universalSearch').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('#searchResults [data-search-node]')?.click()}});
 document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();if(!$('#searchDialog').open&&!$('#readerDialog').open)openSearch()}});
 $$('[data-close]').forEach(b=>b.addEventListener('click',()=>$('#'+b.dataset.close).close()));
@@ -96,4 +98,5 @@ $('#newImport').addEventListener('click',()=>$('#personalImport').click());$('#p
 store.listeners.add(()=>{if(currentView==='personal')renderPersonal();if(currentView==='catalog')renderCatalog()});
 window.addEventListener('storage',e=>{if(['tech-atlas-v2','atlas-personal-v1'].includes(e.key)){store.read();if(currentView==='personal')renderPersonal();if(currentView==='catalog')renderCatalog()}});
 document.addEventListener('visibilitychange',()=>{document.documentElement.toggleAttribute('data-page-hidden',document.hidden)});
+new IntersectionObserver(entries=>$('#welcomePlanet').classList.toggle('welcome-suspended',!entries[0].isIntersecting)).observe($('#welcomePlanet'));
 window.addEventListener('hashchange',route);applyMotion();route();

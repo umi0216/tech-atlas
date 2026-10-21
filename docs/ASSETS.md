@@ -11,7 +11,7 @@ Hero generation prompt:
 
 ## 第四版资产
 
-新界面的星云、星体、环绕光点与远景星光由 Three.js 与 Canvas 程序生成，无额外背景图或外部图像服务。原版行星图片继续保留在原技术星图中。
+新界面的星云、星体、环绕光点与远景星光由 Three.js 与 Canvas 程序生成，无额外背景图或外部图像服务。原版行星图片同时用于知识宇宙首页和原技术星图，作为维护者明确认可的主视觉保留。
 
 `assets/atlas-universe-sans.woff2` 为 Noto Sans SC 可变字体的新增子集，252640 字节。原始字体来自 Google Fonts 仓库 `ofl/notosanssc/NotoSansSC[wght].ttf`；使用 FontTools 对当前界面、知识、旧数据与源码字符生成，ASCII 一并保留。沿用 `assets/OFL-NotoSansSC.txt` 许可证。未覆盖的用户自定义字符按系统字体回退；后续增加公共内容时应检查并更新字形覆盖。
 

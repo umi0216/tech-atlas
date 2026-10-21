@@ -5,7 +5,7 @@
  <meta name="description" content="一个持续生长的知识宇宙。探索数学、计算、生命与人文，连接知识，留下自己的学习轨迹。">
  <title>TECH ATLAS · 知识宇宙</title>
  <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml"><link rel="preload" href="./assets/atlas-universe-sans.woff2" as="font" type="font/woff2" crossorigin>
- <link rel="stylesheet" href="./universe.css?v=a12eec5dc310">
+ <link rel="stylesheet" href="./universe.css?v=aa19a7289bc0">
 </head>
 <body>
  <a class="skip-link" href="#main">跳到主要内容</a>
@@ -16,6 +16,21 @@
  </header>
  <main id="main">
   <div id="universePage" class="page-view">
+   <section class="welcome-planet" id="welcomePlanet" aria-labelledby="welcomeTitle">
+    <div class="welcome-copy">
+     <p class="overline"><span class="live-dot"></span>A PERSONAL JOURNEY THROUGH KNOWLEDGE</p>
+     <h1 id="welcomeTitle">把每次探索，<br>连成自己的<span>宇宙。</span></h1>
+     <p class="welcome-description">从数学、计算，到生命与更远的世界。<br>在这里，记录走过的路，也看见下一个想抵达的地方。</p>
+     <div class="welcome-actions"><button class="welcome-primary" id="enterKnowledgeSpace">进入知识宇宙 <span aria-hidden="true">↗</span></button><a class="welcome-secondary" href="#/universe/mathematics">从数学开始探索 <span aria-hidden="true">→</span></a></div>
+     <p class="welcome-note"><span></span>保持好奇，让理解慢慢连成一片。</p>
+    </div>
+    <figure class="welcome-art">
+     <img class="welcome-planet-image" src="./assets/orbital-world.webp" width="1254" height="1254" alt="紫色环形星球与远行的探测器，象征持续探索的知识宇宙" fetchpriority="high">
+     <svg class="welcome-orbits" viewBox="0 0 600 600" aria-hidden="true" focusable="false"><g transform="translate(300 304) rotate(-24) scale(1 .6)"><circle class="welcome-track" r="247"/><g class="welcome-satellite"><circle cx="247" r="10" opacity=".14"/><circle cx="247" r="3.2"/></g></g><g transform="translate(300 304) rotate(38) scale(1 .79)"><circle class="welcome-track welcome-outer" r="259"/><g class="welcome-satellite welcome-satellite-reverse"><circle cx="259" r="8" opacity=".12"/><circle cx="259" r="2.5"/></g></g></svg>
+     <div class="welcome-coordinate" aria-hidden="true">PERSONAL OBSERVATORY<small>EST. 2026 / ALWAYS CURIOUS</small></div>
+     <figcaption class="welcome-label"><span aria-hidden="true">✦</span><div>探索没有终点<small>ONE SMALL STEP, EVERY DAY.</small></div><i aria-hidden="true">↗</i></figcaption>
+    </figure>
+   </section>
    <section class="observatory" aria-label="三维知识宇宙">
     <div class="space-backdrop" aria-hidden="true"></div>
     <div id="spaceViewport" class="space-viewport" tabindex="0" role="group" aria-label="知识空间，拖动旋转，正负键缩放，方向键旋转；也可使用下方学科按钮"><div id="spaceLabels" class="space-labels"></div></div>
@@ -35,6 +50,6 @@
  <dialog id="readerDialog" class="reader-dialog" aria-labelledby="readerTitle"><div class="reader-top"><span id="readerBreadcrumb"></span><button class="icon-button" data-close="readerDialog" aria-label="关闭知识条目">×</button></div><div class="reader-scroll" id="readerContent"></div></dialog>
  <div id="universeToast" class="universe-toast" role="status" aria-live="polite"></div>
  <noscript><div class="noscript-note">打开交互式知识宇宙需要 JavaScript。<a href="./docs/PROJECT_VISION.md">阅读项目愿景</a></div></noscript>
- <script src="./data.js?v=b96596a472cd"></script><script>globalThis.ATLAS_LEGACY=ATLAS_DATA;</script><script src="./build/universe.js?v=9ae4c138d57a"></script>
+ <script src="./data.js?v=b96596a472cd"></script><script>globalThis.ATLAS_LEGACY=ATLAS_DATA;</script><script src="./build/universe.js?v=d27ceb47b1f4"></script>
 </body>
 </html>

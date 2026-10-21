@@ -1,1 +1,1 @@
-{"name":"tech-atlas","version":"3.0.0","private":true,"description":"A personal knowledge observatory. Static, dependency-free, GitHub Pages ready.","scripts":{"dev":"node scripts/dev-server.mjs","check":"node --check app.js && node --check data.js"}}
+{"name":"tech-atlas","version":"3.1.0","private":true,"description":"A personal knowledge observatory. Static, dependency-free, GitHub Pages ready.","scripts":{"dev":"node scripts/dev-server.mjs","check":"node --check app.js && node --check data.js && node --check motion.js"}}

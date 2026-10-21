@@ -25,6 +25,7 @@
   } catch(e){ /* no local storage */ }
   let currentView='universe', selectedDomain='all', selectedStatus='all', catalogDomain='all', search='', selectedSkill=null, selectedMilestone=null;
   let camera={x:0,y:0,s:1}, dragging=null, toastTimer=null, showAllEdges=false, previousFocus=null;
+  let cameraFrame=0, cameraGoal=null, cameraPositioned=false;
   const svgNS='http://www.w3.org/2000/svg';
   const svg = $('#cosmosSvg');
   const world = $('#universeWorld');
@@ -83,8 +84,25 @@
     world.querySelectorAll('.galaxy-number').forEach(t=>t.setAttribute('font-size',clamp(10/camera.s,12,17)));
     renderMobileOverview();
   }
-  function fitView(){const w=stage.clientWidth,h=stage.clientHeight;camera={s:Math.min((w-66)/1650,(h-100)/810),x:w/2-25,y:h/2-8};setCamera()}
-  function focusDomain(id){const p=galaxyPos[id];if(!p)return;const w=stage.clientWidth,h=stage.clientHeight;camera.s=clamp(Math.min((w-65)/420,(h-90)/370),.55,1.55);camera.x=w/2-(p.x+17)*camera.s;camera.y=h/2-(p.y-12)*camera.s;setCamera()}
+  // The camera always stores the currently drawn position, so a new drag can
+  // interrupt a transition without jumping to its old destination.
+  function stopCameraMotion(){cancelAnimationFrame(cameraFrame);cameraFrame=0;cameraGoal=null;stage.removeAttribute('data-camera-moving')}
+  function moveCamera(next){
+    stopCameraMotion();
+    if(!cameraPositioned||document.documentElement.dataset.motion!=='on'||document.hidden){camera=next;cameraPositioned=true;setCamera();return}
+    const from={...camera},begin=performance.now();cameraGoal=next;stage.dataset.cameraMoving='true';
+    const frame=now=>{
+      const t=Math.min((now-begin)/560,1),ease=1-Math.pow(1-t,3);
+      camera={x:from.x+(next.x-from.x)*ease,y:from.y+(next.y-from.y)*ease,s:from.s+(next.s-from.s)*ease};setCamera();
+      if(t<1)cameraFrame=requestAnimationFrame(frame);else{cameraFrame=0;cameraGoal=null;stage.removeAttribute('data-camera-moving')}
+    };
+    cameraFrame=requestAnimationFrame(frame);
+  }
+  function fitView(){const w=stage.clientWidth,h=stage.clientHeight;moveCamera({s:Math.min((w-66)/1650,(h-100)/810),x:w/2-25,y:h/2-8})}
+  function focusDomain(id){const p=galaxyPos[id];if(!p)return;const w=stage.clientWidth,h=stage.clientHeight,s=clamp(Math.min((w-65)/420,(h-90)/370),.55,1.55);moveCamera({s,x:w/2-(p.x+17)*s,y:h/2-(p.y-12)*s})}
+  function finishCameraMotion(){if(!cameraGoal)return;const next=cameraGoal;stopCameraMotion();camera=next;setCamera()}
+  window.addEventListener('atlas:motionchange',e=>{if(!e.detail.enabled)finishCameraMotion()});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)finishCameraMotion()});
   function showRelated(a,b){return selectedSkill&&(a===selectedSkill||b===selectedSkill)}
   function eligible(s){return (selectedDomain==='all'||s.domain===selectedDomain)&&(selectedStatus==='all'||s.status===selectedStatus)&&(!search||(`${s.name} ${s.detail} ${domainById[s.domain].name}`).toLowerCase().includes(search.toLowerCase()))}
   function renderMap(){
@@ -106,7 +124,7 @@
       const sa=getSkill(a),sb=getSkill(b),internal=sa.domain===sb.domain;
       const dx=pb.x-pa.x,dy=pb.y-pa.y;
       const curve=internal?16:Math.min(Math.abs(dx)*.1+Math.abs(dy)*.08,85);
-      ns('path',{d:`M ${pa.x} ${pa.y} C ${pa.x+dx*.35} ${pa.y+dy*.25-curve}, ${pb.x-dx*.35} ${pb.y-dy*.25-curve}, ${pb.x} ${pb.y}`,class:'edge','data-a':a,'data-b':b,'data-internal':internal?'1':'0'},world);
+      ns('path',{d:`M ${pa.x} ${pa.y} C ${pa.x+dx*.35} ${pa.y+dy*.25-curve}, ${pb.x-dx*.35} ${pb.y-dy*.25-curve}, ${pb.x} ${pb.y}`,class:'edge',pathLength:1,'data-a':a,'data-b':b,'data-internal':internal?'1':'0'},world);
     });
     // Small explorer coordinate, deliberately separate from scored skill nodes.
     const origin=ns('g',{opacity:'.7'},world);
@@ -186,7 +204,7 @@
   function renderAll(){renderStats();renderSidebar();renderFilters();renderMap();if(currentView==='catalog')renderCatalog();if(currentView==='roadmap')renderRoadmap()}
 
   // navigation / search / filter
-  $$('.nav-item').forEach(b=>b.addEventListener('click',()=>{selectedDomain='all';renderSidebar();switchView(b.dataset.view);if(currentView==='universe')fitView();$('#explore').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'})}));
+  $$('.nav-item').forEach(b=>b.addEventListener('click',()=>{selectedDomain='all';renderSidebar();switchView(b.dataset.view);if(currentView==='universe')fitView();$('#explore').scrollIntoView({behavior:document.documentElement.dataset.motion==='on'?'smooth':'instant',block:'start'})}));
   $$('.filter-pill').forEach(b=>b.addEventListener('click',()=>{selectedStatus=b.dataset.status;renderAll()}));
   $('#mapReset').addEventListener('click',clearDomain);$('#zoomReset').addEventListener('click',clearDomain);
   $('#closeInspector').addEventListener('click',closeInspector);$('#drawerScrim').addEventListener('click',closeInspector);
@@ -196,9 +214,9 @@
   searchInput.addEventListener('input',()=>{search=searchInput.value.trim();if(search&&selectedDomain!=='all'){selectedDomain='all';selectedStatus='all';renderSidebar();renderFilters();if(currentView==='universe')fitView()}if(search&&(currentView==='roadmap'||innerWidth<700))switchView('catalog');renderMap();if(currentView==='catalog')renderCatalog()});
   $('#zoomIn').addEventListener('click',()=>zoomAt(stage.clientWidth*.5,stage.clientHeight*.5,1.3));
   $('#zoomOut').addEventListener('click',()=>zoomAt(stage.clientWidth*.5,stage.clientHeight*.5,1/1.3));
-  function zoomAt(px,py,factor){const next=clamp(camera.s*factor,.26,2.9),ratio=next/camera.s;camera.x=px-(px-camera.x)*ratio;camera.y=py-(py-camera.y)*ratio;camera.s=next;setCamera()}
+  function zoomAt(px,py,factor){stopCameraMotion();const next=clamp(camera.s*factor,.26,2.9),ratio=next/camera.s;camera.x=px-(px-camera.x)*ratio;camera.y=py-(py-camera.y)*ratio;camera.s=next;setCamera()}
   stage.addEventListener('wheel',e=>{e.preventDefault();const rect=stage.getBoundingClientRect();zoomAt(e.clientX-rect.left,e.clientY-rect.top,Math.exp(-e.deltaY*.001))},{passive:false});
-  stage.addEventListener('pointerdown',e=>{if(e.button!==0||e.target.closest('button,[data-skill],[data-domain]'))return;dragging={x:e.clientX,y:e.clientY,tx:camera.x,ty:camera.y};stage.setPointerCapture(e.pointerId)});
+  stage.addEventListener('pointerdown',e=>{if(e.button!==0||e.target.closest('button,[data-skill],[data-domain]'))return;stopCameraMotion();dragging={x:e.clientX,y:e.clientY,tx:camera.x,ty:camera.y};stage.setPointerCapture(e.pointerId)});
   stage.addEventListener('pointermove',e=>{if(!dragging)return;const dx=e.clientX-dragging.x,dy=e.clientY-dragging.y;if(Math.abs(dx)+Math.abs(dy)>4)dragging.moved=true;camera.x=dragging.tx+dx;camera.y=dragging.ty+dy;setCamera()});
   stage.addEventListener('pointerup',e=>{if(!dragging)return;const moved=dragging.moved;dragging=null;try{stage.releasePointerCapture(e.pointerId)}catch(_){};if(moved){ // 捕获阶段不应意外触发星体的 click
       stage.dataset.justDragged='1';setTimeout(()=>delete stage.dataset.justDragged,25);
@@ -212,7 +230,7 @@
   $('#importBtn').addEventListener('click',()=>$('#importInput').click());
   $('#importInput').addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;try{if(file.size>2e6)throw new Error('文件过大');const payload=JSON.parse(await file.text());if(payload.format!=='tech-atlas'||payload.version!==2||typeof payload.overrides!=='object'||!payload.overrides||Array.isArray(payload.overrides))throw new Error('不是此版本的技术宇宙备份');const fresh={};for(const [id,o] of Object.entries(payload.overrides)){if(!skillIds.has(id)||typeof o!=='object'||!o)continue;fresh[id]={mastery:clamp(Math.round(Number(o.mastery)||0),0,5),status:Object.hasOwn(STATUS,o.status)?o.status:'future',priority:Object.hasOwn(PRI,o.priority)?o.priority:'later',note:String(o.note||'').slice(0,3000),evidence:Array.isArray(o.evidence)?o.evidence.slice(0,30).map(x=>String(x).slice(0,160)):[]};}saved.overrides=fresh;saved.milestones={};if(payload.milestones&&typeof payload.milestones==='object') for(const m of DATA.milestones) m.checks.forEach((_,j)=>{const k=`${m.id}:${j}`;if(payload.milestones[k]===true)saved.milestones[k]=true});persist();renderAll();closeInspector();toast('已导入进度备份')}catch(err){toast(`导入失败：${err.message}`)}finally{e.target.value=''}});
   $('#resetData').addEventListener('click',()=>{if(confirm('恢复初始示例数据？所有未导出的本地修改将被覆盖。')){saved={version:2,overrides:{},milestones:{}};persist();renderAll();closeInspector();toast('已恢复初始示例数据')}});
-  $$('[data-jump]').forEach(b=>b.addEventListener('click',()=>{selectedDomain='all';switchView(b.dataset.jump);renderAll();if(currentView==='universe')fitView();$('#explore').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'})}));
+  $$('[data-jump]').forEach(b=>b.addEventListener('click',()=>{selectedDomain='all';switchView(b.dataset.jump);renderAll();if(currentView==='universe')fitView();$('#explore').scrollIntoView({behavior:document.documentElement.dataset.motion==='on'?'smooth':'instant',block:'start'})}));
   $('#allDomainsBtn').addEventListener('click',clearDomain);
   // Accessible mobile field switcher and map controls.
   const domainSelect=document.createElement('select');domainSelect.id='domainSelect';domainSelect.className='mobile-domains';domainSelect.setAttribute('aria-label','选择知识星系');
@@ -232,7 +250,7 @@
   svg.addEventListener('keydown',e=>{
     if(e.target!==svg)return;
     const offsets={ArrowLeft:[40,0],ArrowRight:[-40,0],ArrowUp:[0,40],ArrowDown:[0,-40]};
-    if(offsets[e.key]){e.preventDefault();camera.x+=offsets[e.key][0];camera.y+=offsets[e.key][1];setCamera()}
+    if(offsets[e.key]){e.preventDefault();stopCameraMotion();camera.x+=offsets[e.key][0];camera.y+=offsets[e.key][1];setCamera()}
     if(e.key==='+'||e.key==='='){e.preventDefault();zoomAt(stage.clientWidth/2,stage.clientHeight/2,1.2)}
     if(e.key==='-'){e.preventDefault();zoomAt(stage.clientWidth/2,stage.clientHeight/2,1/1.2)}
   });
